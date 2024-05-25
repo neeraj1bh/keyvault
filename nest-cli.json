@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/keyvault/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/keyvault/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/keyvault",
+  "projects": {
+    "keyvault": {
+      "type": "application",
+      "root": "apps/keyvault",
+      "entryFile": "main",
+      "sourceRoot": "apps/keyvault/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/keyvault/tsconfig.app.json"
+      }
+    },
+    "key-master-service": {
+      "type": "application",
+      "root": "apps/key-master-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/key-master-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/key-master-service/tsconfig.app.json"
+      }
+    },
+    "token-info-service": {
+      "type": "application",
+      "root": "apps/token-info-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/token-info-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/token-info-service/tsconfig.app.json"
+      }
+    }
+  }
+}
