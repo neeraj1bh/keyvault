@@ -9,6 +9,6 @@ async function bootstrap() {
 
   const configService = app.get<ConfigService>(ConfigService);
 
-  await app.listen(configService.get<string>('KEY_MICROSERVICE_URL'));
+  await app.listen(configService.get<string>('TOKEN_PORT'));
 }
 bootstrap();

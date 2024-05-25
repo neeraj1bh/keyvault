@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: `${process.cwd()}/apps/key-master-service/.env`,
     }),
   ],
   controllers: [KeyMasterServiceController],

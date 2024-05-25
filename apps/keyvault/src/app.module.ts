@@ -8,6 +8,7 @@ import { AuthModule } from '@app/auth';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: `${process.cwd()}/apps/keyvault/.env`,
     }),
     AuthModule,
   ],

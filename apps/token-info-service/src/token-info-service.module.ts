@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: `${process.cwd()}/apps/token-info-service/.env`,
     }),
   ],
   controllers: [TokenInfoServiceController],
