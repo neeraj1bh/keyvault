@@ -11,7 +11,9 @@ describe('KeyMasterServiceController', () => {
       providers: [KeyMasterServiceService],
     }).compile();
 
-    keyMasterServiceController = app.get<KeyMasterServiceController>(KeyMasterServiceController);
+    keyMasterServiceController = app.get<KeyMasterServiceController>(
+      KeyMasterServiceController,
+    );
   });
 
   describe('root', () => {

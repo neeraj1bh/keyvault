@@ -3,7 +3,9 @@ import { KeyMasterServiceService } from './key-master-service.service';
 
 @Controller()
 export class KeyMasterServiceController {
-  constructor(private readonly keyMasterServiceService: KeyMasterServiceService) {}
+  constructor(
+    private readonly keyMasterServiceService: KeyMasterServiceService,
+  ) {}
 
   @Get()
   getHello(): string {
