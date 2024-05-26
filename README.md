@@ -22,52 +22,130 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
+# KeyVault Microservices Architecture
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This project implements a microservices architecture using NestJS. The architecture is designed to handle multiple services with robust error handling, logging, authentication, and rate limiting. PostgreSQL is used as the database and is shared across all the microservices.
 
-## Installation
+## Project Structure
+
+The project is organized into several modules and services to maintain a modular structure. The main services include:
+
+- **KeyVault**: The main service handling key management.
+- **Key Master Service**: Manages the keys and their associated operations.
+- **Token Info Service**: Handles token information and validation.
+
+## Features
+
+- **Microservices Architecture**: Using HTTP for communication between services.
+- **Centralized Error Handling**: All errors from microservices are propagated to the main route service (BFF - Backend For Frontend) using custom filters and exceptions.
+- **Logging**: Winston is used for logging across all services.
+- **Modular Structure**: Separate modules for OAuth, database, and logging, which can be imported into any microservice.
+- **Dockerized**: The entire application is containerized using Docker for easy deployment.
+- **Rate Limiting**: Applied to API endpoints to prevent abuse.
+- **PostgreSQL**: Used as the database and shared across all microservices.
+- **Authentication**: Implemented for admin routes, ensuring secure access.
+- **Zero Trust Policy**: Strict security measures ensuring services with protected endpoints can only be accessed through proper authentication.
+- **Shared Contexts**: Contexts and authentication are shared across all services.
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js
+- Yarn
+- Docker
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/neeraj1bh/keyvault.git
+   cd keyvault
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   yarn install
+   ```
+
+3. Set up the environment variables:
+
+   Create a `.env` file in the root and all other directories where there is a `.env.example` and add the necessary environment variables.
+
+4. Build the application:
+
+   ```bash
+   yarn build
+   ```
+
+### Running the Application
+
+#### Development
+
+To run the application in development mode:
 
 ```bash
-$ yarn install
+yarn start:dev
 ```
 
-## Running the app
+#### Production
+
+To run the application in production mode:
 
 ```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+yarn start:prod
 ```
 
-## Test
+### Docker under progress
 
-```bash
-# unit tests
-$ yarn run test
+To run the application using Docker:
 
-# e2e tests
-$ yarn run test:e2e
+1. Build the Docker images and start the services:
 
-# test coverage
-$ yarn run test:cov
-```
+   ```bash
+   docker-compose up --build
+   ```
 
-## Support
+### Scripts
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- `yarn build`: Build all libraries and applications.
+- `yarn format`: Format the code using Prettier.
+- `yarn start`: Start the NestJS application.
+- `yarn lint`: Run ESLint to lint the code.
 
-## Stay in touch
+## Modules
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### Auth Module
 
-## License
+Handles authentication and authorization using JWT.
 
-Nest is [MIT licensed](LICENSE).
+### Logger Module
+
+Provides logging functionality using Winston, and can be imported into any service.
+
+### Database Module
+
+Configures TypeORM and provides a connection to the PostgreSQL database.
+
+## Error Handling
+
+Custom filters and exceptions are used to propagate errors from all microservices to the main route service (BFF). The following files handle error responses:
+
+- **ValidationExceptionFilter**: Handles validation errors.
+- **ThrottlerExceptionFilter**: Handles rate limiting errors.
+- **HttpErrorInterceptor**: Intercepts HTTP errors and formats them for consistent responses.
+
+## Rate Limiting
+
+Rate limiting is applied to API endpoints using the `@nestjs/throttler` package. This prevents abuse and ensures fair usage of the API.
+
+## Security
+
+- **Authentication**: Admin routes are protected and require valid JWT tokens.
+- **Zero Trust Policy**: Ensures that services with protected endpoints can only be accessed through proper authentication.
+
+## Database
+
+- **PostgreSQL**: Used as the primary database and shared across all microservices.

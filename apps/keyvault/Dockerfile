@@ -3,11 +3,13 @@ FROM node:alpine AS development
 WORKDIR /usr/src/app
 
 COPY package.json yarn.lock ./
-COPY apps ./apps
+COPY apps/keyvault ./apps/keyvault
 COPY libs ./libs
 COPY tsconfig.json tsconfig.build.json nest-cli.json ./
 
 RUN yarn install
+RUN yarn build:libs
+WORKDIR /usr/src/app/apps/keyvault
 RUN yarn build
 
 CMD ["yarn", "dev:keyvault"]

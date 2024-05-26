@@ -3,11 +3,13 @@ FROM node:alpine AS development
 WORKDIR /usr/src/app
 
 COPY package.json yarn.lock ./
-COPY apps ./apps
+COPY apps/token-info-service ./apps/token-info-service
 COPY libs ./libs
 COPY tsconfig.json tsconfig.build.json nest-cli.json ./
 
 RUN yarn install
+RUN yarn build:libs
+WORKDIR /usr/src/app/apps/token-info-service
 RUN yarn build
 
 CMD ["yarn", "dev:token"]

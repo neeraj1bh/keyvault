@@ -31,7 +31,6 @@ export class AdminService {
 
   async updateKey(key: string, updateKeyDto: UpdateKeyDto): Promise<Key> {
     try {
-      console.log('updateKeyDto', updateKeyDto, 'key', key);
       await this.keyRepository.update({ key }, updateKeyDto);
       return this.keyRepository.findOne({ where: { key } });
     } catch (error) {
