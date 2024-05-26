@@ -1,7 +1,7 @@
+import { Key } from '@app/db/entities';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Key } from '../../../../libs/db/src/entities/key.entity';
 
 @Injectable()
 export class UserService {

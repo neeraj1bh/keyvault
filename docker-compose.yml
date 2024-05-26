@@ -12,11 +12,8 @@ services:
     container_name: keyvault
     environment:
       - NODE_ENV=development
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
     depends_on:
       - postgres
-      - redis
 
   key-master-service:
     build:
@@ -30,11 +27,8 @@ services:
     container_name: key-master-service
     environment:
       - NODE_ENV=development
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
     depends_on:
       - postgres
-      - redis
 
   token-info-service:
     build:
@@ -48,11 +42,8 @@ services:
     container_name: token-info-service
     environment:
       - NODE_ENV=development
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
     depends_on:
       - postgres
-      - redis
 
   postgres:
     image: postgres:13-alpine
@@ -66,12 +57,6 @@ services:
       - '5432:5432'
     volumes:
       - pgdata:/var/lib/postgresql/data
-
-  redis:
-    image: redis:alpine
-    container_name: redis
-    ports:
-      - '6379:6379'
 
 volumes:
   pgdata:

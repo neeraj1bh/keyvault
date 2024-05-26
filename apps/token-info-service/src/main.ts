@@ -9,6 +9,7 @@ async function bootstrap() {
 
   const configService = app.get<ConfigService>(ConfigService);
 
+  console.log(configService.get<string>('TOKEN_PORT'));
   await app.listen(configService.get<string>('TOKEN_PORT'));
 }
 bootstrap();

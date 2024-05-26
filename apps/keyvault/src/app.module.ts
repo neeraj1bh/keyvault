@@ -4,6 +4,8 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '@app/auth';
 import { HttpModule } from '@nestjs/axios';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { HeadersInterceptor } from './interceptor/token.interceptor';
 
 @Module({
   imports: [
@@ -15,6 +17,12 @@ import { HttpModule } from '@nestjs/axios';
     HttpModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: HeadersInterceptor,
+    },
+  ],
 })
 export class AppModule {}

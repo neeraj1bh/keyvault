@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
-import * as url from 'url';
+import { resolve } from 'url';
 
 @Injectable()
 export class AppService {
@@ -15,12 +15,9 @@ export class AppService {
     return 'Hello World!';
   }
 
-  async forwardRequest(req, body) {
+  async forwardRequest(method, url, body) {
     const baseUrl = this.configService.get<string>('KEY_MICROSERVICE_URL');
-    const requestUrl = url.resolve(baseUrl, req.url);
-    const method = req.method;
-
-    console.log(`Forwarding request to ${requestUrl} with method ${method}`);
+    const requestUrl = resolve(baseUrl, url);
 
     let response;
     switch (method.toLowerCase()) {
@@ -36,6 +33,15 @@ export class AppService {
         );
         break;
     }
+
+    return response.data;
+  }
+
+  async forwardTokenRequest(url) {
+    const baseUrl = this.configService.get<string>('TOKEN_MICROSERVICE_URL');
+    const requestUrl = `${baseUrl}${url}`;
+
+    const response = await firstValueFrom(this.httpService.get(requestUrl));
 
     return response.data;
   }

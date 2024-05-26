@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Key } from '../../../../libs/db/src/entities/key.entity';
 import { CreateKeyDto, UpdateKeyDto } from './dto/admin.dto';
+import { Key } from '@app/db/entities';
 
 @Injectable()
 export class AdminService {
@@ -21,7 +21,7 @@ export class AdminService {
 
   async updateKey(id: number, updateKeyDto: UpdateKeyDto): Promise<Key> {
     await this.keyRepository.update(id, updateKeyDto);
-    return this.keyRepository.findOne(id);
+    return this.keyRepository.findOne({ where: { id } });
   }
 
   async deleteKey(id: number): Promise<void> {
@@ -33,6 +33,6 @@ export class AdminService {
   }
 
   private generateKey(): string {
-    return Math.random().toString(36).substr(2, 16); // Simple random key generation
+    return Math.random().toString(36).substr(2, 16);
   }
 }
