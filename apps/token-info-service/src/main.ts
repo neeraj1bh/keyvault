@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { TokenInfoServiceModule } from './token-info-service.module';
 import { ConfigService } from '@nestjs/config';
+import { ThrottlerExceptionFilter } from './filters/throttler-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(TokenInfoServiceModule, {
@@ -8,8 +9,8 @@ async function bootstrap() {
   });
 
   const configService = app.get<ConfigService>(ConfigService);
+  app.useGlobalFilters(new ThrottlerExceptionFilter());
 
-  console.log(configService.get<string>('TOKEN_PORT'));
   await app.listen(configService.get<string>('TOKEN_PORT'));
 }
 bootstrap();

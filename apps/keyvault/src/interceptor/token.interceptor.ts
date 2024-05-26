@@ -13,10 +13,16 @@ export class HeadersInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const ctx = context.switchToHttp();
     const key = ctx.getRequest().headers['x-api-key'];
+    const auth = ctx.getRequest().headers['authorization'];
 
     if (key) {
       this.httpService.axiosRef.defaults.headers.common['x-api-key'] = key;
     }
+
+    if (auth) {
+      this.httpService.axiosRef.defaults.headers.common['authorization'] = auth;
+    }
+
     return next.handle().pipe();
   }
 }

@@ -6,11 +6,14 @@ import {
   Param,
   Delete,
   Get,
+  UseGuards,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { CreateKeyDto, UpdateKeyDto } from './dto/admin.dto';
+import { JwtAuthGuard } from '@app/auth/jwt-auth.guard';
 
 @Controller('admin')
+@UseGuards(JwtAuthGuard)
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
@@ -19,14 +22,14 @@ export class AdminController {
     return this.adminService.createKey(createKeyDto);
   }
 
-  @Put('key/:id')
-  updateKey(@Param('id') id: number, @Body() updateKeyDto: UpdateKeyDto) {
-    return this.adminService.updateKey(id, updateKeyDto);
+  @Put('key/:key')
+  updateKey(@Param('key') key: string, @Body() updateKeyDto: UpdateKeyDto) {
+    return this.adminService.updateKey(key, updateKeyDto);
   }
 
-  @Delete('key/:id')
-  deleteKey(@Param('id') id: number) {
-    return this.adminService.deleteKey(id);
+  @Delete('key/:key')
+  deleteKey(@Param('key') key: string) {
+    return this.adminService.deleteKey(key);
   }
 
   @Get('keys')

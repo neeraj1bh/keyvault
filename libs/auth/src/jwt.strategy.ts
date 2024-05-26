@@ -19,8 +19,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException('Invalid audience');
     }
 
-    // Additional validation logic for issuer, subject, etc.
-
-    return { userId: payload.sub, username: payload.username };
+    return {};
   }
 }

@@ -8,6 +8,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_GUARD } from '@nestjs/core';
 import { RateLimitGuard } from './guards/rate-limit.guard';
+import { LoggerModule } from '@app/logger';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { RateLimitGuard } from './guards/rate-limit.guard';
     DbModule.forRoot(),
     TypeOrmModule.forFeature([Key]),
     ThrottlerModule.forRoot(),
+    LoggerModule,
   ],
   controllers: [TokenInfoController],
   providers: [

@@ -2,16 +2,16 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Key {
-  @PrimaryGeneratedColumn()
-  id!: number;
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
-  @Column()
+  @Column({ type: 'varchar', unique: true })
   key!: string;
 
   @Column()
   rateLimit!: number;
 
-  @Column()
+  @Column({ type: 'timestamp', nullable: true })
   expiresAt!: Date;
 
   @Column({ default: true })

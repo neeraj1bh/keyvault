@@ -3,36 +3,68 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateKeyDto, UpdateKeyDto } from './dto/admin.dto';
 import { Key } from '@app/db/entities';
+import { randomBytes } from 'crypto';
+import { LoggerService } from '@app/logger';
 
 @Injectable()
 export class AdminService {
   constructor(
     @InjectRepository(Key)
     private keyRepository: Repository<Key>,
+    private readonly logger: LoggerService,
   ) {}
 
+  APP_CONTEXT = 'AdminService';
+
   async createKey(createKeyDto: CreateKeyDto): Promise<Key> {
-    const key = this.keyRepository.create({
-      ...createKeyDto,
-      key: this.generateKey(),
-    });
-    return this.keyRepository.save(key);
+    try {
+      const key = this.keyRepository.create({
+        ...createKeyDto,
+        key: this.generateKey(),
+      });
+      return this.keyRepository.save(key);
+    } catch (error) {
+      this.logger.error('Error creating key:', error, this.APP_CONTEXT);
+      throw error;
+    }
   }
 
-  async updateKey(id: number, updateKeyDto: UpdateKeyDto): Promise<Key> {
-    await this.keyRepository.update(id, updateKeyDto);
-    return this.keyRepository.findOne({ where: { id } });
+  async updateKey(key: string, updateKeyDto: UpdateKeyDto): Promise<Key> {
+    try {
+      console.log('updateKeyDto', updateKeyDto, 'key', key);
+      await this.keyRepository.update({ key }, updateKeyDto);
+      return this.keyRepository.findOne({ where: { key } });
+    } catch (error) {
+      this.logger.error('Error updating key:', error, this.APP_CONTEXT);
+      throw error;
+    }
   }
 
-  async deleteKey(id: number): Promise<void> {
-    await this.keyRepository.delete(id);
+  async deleteKey(key: string): Promise<void> {
+    try {
+      await this.keyRepository.delete({ key });
+    } catch (error) {
+      this.logger.error('Error deleting key:', error, this.APP_CONTEXT);
+      throw error;
+    }
   }
 
   async listKeys(): Promise<Key[]> {
-    return this.keyRepository.find();
+    try {
+      return this.keyRepository.find();
+    } catch (error) {
+      this.logger.error('Error listing keys:', error, this.APP_CONTEXT);
+      throw error;
+    }
   }
 
   private generateKey(): string {
-    return Math.random().toString(36).substr(2, 16);
+    try {
+      const randomBytesBuffer = randomBytes(8);
+      return randomBytesBuffer.toString('hex');
+    } catch (error) {
+      this.logger.error('Error generating key:', error, this.APP_CONTEXT);
+      return '';
+    }
   }
 }

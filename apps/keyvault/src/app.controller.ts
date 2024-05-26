@@ -24,7 +24,7 @@ export class AppController {
 
   @All('admin/*')
   @UseGuards(JwtAuthGuard)
-  forwardRequest(@Req() req, @Body() body?) {
+  forwardRequest(@Req() req, @Body() body) {
     const method = req.method;
     const url = req.url;
 

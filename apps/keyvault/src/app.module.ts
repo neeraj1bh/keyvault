@@ -6,6 +6,7 @@ import { AuthModule } from '@app/auth';
 import { HttpModule } from '@nestjs/axios';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { HeadersInterceptor } from './interceptor/token.interceptor';
+import { HttpErrorInterceptor } from './interceptor/http-error.interceptor';
 
 @Module({
   imports: [
@@ -22,6 +23,10 @@ import { HeadersInterceptor } from './interceptor/token.interceptor';
     {
       provide: APP_INTERCEPTOR,
       useClass: HeadersInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: HttpErrorInterceptor,
     },
   ],
 })
