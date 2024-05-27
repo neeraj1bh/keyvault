@@ -1,116 +1,17 @@
 version: '3.8'
 services:
-  keyvault:
-    build:
-      context: .
-      dockerfile: ./apps/keyvault/Dockerfile
-    ports:
-      - '3000:3000'
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    container_name: keyvault
-    environment:
-      - NODE_ENV=development
-      - PORT=3000
-      - KEY_PORT=3001
-      - TOKEN_PORT=3002
-      - KEY_MICROSERVICE_URL=http://key-master-service:3001
-      - TOKEN_MICROSERVICE_URL=http://token-info-service:3002
-      - JWT_SECRET=neeraj123
-      - JWT_EXPIRATION=3600
-      - JWT_AUDIENCE=nb9t7
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_USER=keyvaultest_dev
-      - DB_PASSWORD=SuperCoolPassword123
-      - DB_NAME=keyvaultest
-    depends_on:
-      postgres:
-        condition: service_healthy
-    command: >
-      sh -c "npm run migration:run && npm run start:dev"
-
-  key-master-service:
-    build:
-      context: .
-      dockerfile: ./apps/key-master-service/Dockerfile
-    ports:
-      - '3001:3001'
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    container_name: key-master-service
-    environment:
-      - NODE_ENV=development
-      - PORT=3001
-      - KEY_PORT=3001
-      - TOKEN_PORT=3002
-      - KEY_MICROSERVICE_URL=http://key-master-service:3001
-      - TOKEN_MICROSERVICE_URL=http://token-info-service:3002
-      - JWT_SECRET=neeraj123
-      - JWT_EXPIRATION=3600
-      - JWT_AUDIENCE=nb9t7
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_USER=keyvaultest_dev
-      - DB_PASSWORD=SuperCoolPassword123
-      - DB_NAME=keyvaultest
-    depends_on:
-      postgres:
-        condition: service_healthy
-    command: >
-      sh -c "npm run migration:run && npm run start:dev"
-
-  token-info-service:
-    build:
-      context: .
-      dockerfile: ./apps/token-info-service/Dockerfile
-    ports:
-      - '3002:3002'
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    container_name: token-info-service
-    environment:
-      - NODE_ENV=development
-      - PORT=3002
-      - KEY_PORT=3001
-      - TOKEN_PORT=3002
-      - KEY_MICROSERVICE_URL=http://key-master-service:3001
-      - TOKEN_MICROSERVICE_URL=http://token-info-service:3002
-      - JWT_SECRET=neeraj123
-      - JWT_EXPIRATION=3600
-      - JWT_AUDIENCE=nb9t7
-      - DB_HOST=postgres
-      - DB_PORT=5432
-      - DB_USER=keyvaultest_dev
-      - DB_PASSWORD=SuperCoolPassword123
-      - DB_NAME=keyvaultest
-    depends_on:
-      postgres:
-        condition: service_healthy
-    command: >
-      sh -c "npm run migration:run && npm run start:dev"
-
   postgres:
     image: postgres:13-alpine
     container_name: postgres
     restart: always
     environment:
-      POSTGRES_USER: keyvaultest_dev
+      POSTGRES_USER: keyvault-dev
       POSTGRES_PASSWORD: SuperCoolPassword123
-      POSTGRES_DB: keyvaultest
+      POSTGRES_DB: keyvault
     ports:
       - '5432:5432'
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./scripts/local-db-provision.sql:/docker-entrypoint-initdb.d/1.sql
-    healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U keyvaultest_dev']
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
 volumes:
   pgdata:
